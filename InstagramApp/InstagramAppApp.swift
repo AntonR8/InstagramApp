@@ -12,6 +12,7 @@ struct InstagramAppApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(NavigationViewModel())
         }
     }
 }
