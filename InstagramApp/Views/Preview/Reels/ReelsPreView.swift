@@ -9,36 +9,34 @@ import SwiftUI
 import StoreKit
 import ApphudSDK
 
-struct ClipPreView: View {
+struct ReelsPreView: View {
     @Environment(NavigationViewModel.self) var navigationViewModel
-    @State var videosViewModel = VideosViewModel()
-    var paywallViewModel: PaywallViewModel
+    @State var reelsViewModel = ReelsViewModel()
     @Bindable var mainViewModel: MainViewModel
-    let tiktokLink: String
-    let clipLink: String
+    let reels: ReelsModel
 
     var body: some View {
         VStack {
-//            if let clipInfo = mainViewModel.clipInfo {
-//                VideoPreview(info: clipInfo, clipLink: clipLink)
-//                MenuView(videosViewModel: videosViewModel, mainViewModel: mainViewModel, link: clipLink, info: clipInfo)
-//                    .padding(.bottom)
-//                CapsuleButton(leftIcon: "crown", title: "Save HD", action: {
+            if let reelsData = mainViewModel.reelsData {
+                ReelsVideoPreview(reels: reels)
+                ReelsMenuView(reelsViewModel: reelsViewModel, mainViewModel: mainViewModel, reels: reels)
+                    .padding(.bottom)
+                CapsuleButton(leftIcon: "crown", title: "Save HD", action: {
 //                    if mainViewModel.freeSavingsRemain() {
 //                        mainViewModel.downloadAndSaveVideoToGallery()
 //                    } else {
-//                        paywallViewModel.showPaywall = true
+//                        navigationViewModel.showPaywall = true
 //                    }
-//                })
-//            } else {
-//                ProgressView()
-//            }
+                })
+            } else {
+                ProgressView()
+            }
         }
         .onAppear{
-            videosViewModel.loadVideos()
+            reelsViewModel.loadVideos()
         }
         .overlay(alignment: .top) {
-            PreviewNotifications(mainViewModel: mainViewModel, videosViewModel: videosViewModel)
+            PreviewNotifications(mainViewModel: mainViewModel, reelsViewModel: reelsViewModel)
         }
         .padding(.horizontal)
         .navigationTitle("Reels")
@@ -54,19 +52,19 @@ struct ClipPreView: View {
                 }
             }
         }
-        .sheet(isPresented: $videosViewModel.showSelectVideoFolders) {
-            SelectVideoFolder(videosViewModel: videosViewModel)
+        .sheet(isPresented: $reelsViewModel.showSelectVideoFolders) {
+            SelectVideoFolder(reelsViewModel: reelsViewModel)
                 .presentationDetents([.medium])
         }
         .popover(isPresented: $mainViewModel.showRateMeView, content: {
             RateMeView(mainViewModel: mainViewModel)
         })
-        .newVideoFolderAllert(videosViewModel: videosViewModel)
+        .newVideoFolderAllert(reelsViewModel: reelsViewModel)
     }
 }
 
 #Preview {
-    ClipPreView(paywallViewModel: PaywallViewModel(), mainViewModel: MainViewModel(), tiktokLink: "", clipLink: "")
+    ReelsPreView(mainViewModel: MainViewModel(), reels: mockReelsResponse.data.reels)
         .environment(NavigationViewModel())
 }
 

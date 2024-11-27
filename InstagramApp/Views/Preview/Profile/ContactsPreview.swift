@@ -8,17 +8,24 @@
 import SwiftUI
 
 struct ContactsPreview: View {
-    let contacts: [String]
+    let biolinks: [BioLink]
     var body: some View {
         VStack(alignment: .leading) {
-            ForEach(contacts, id: \.self) { contact in
-                Label(contact, systemImage: "link")
+            ForEach(biolinks, id: \.self) { biolink in
+                if let link = URL(string: biolink.url) {
+                    Link(destination: link) {
+                        Label(biolink.url, systemImage: "link")
+                    }
+                }
             }
         }
         .font(.caption)
+        .foregroundStyle(.black)
     }
 }
 
 #Preview {
-    ContactsPreview(contacts: ["youtu.be/oKhf382w?", "t.me/cosmosprosto"])
+    NavigationStack {
+        ContactsPreview(biolinks: mockProfileResponse.data.profile.bioLinks)
+    }
 }

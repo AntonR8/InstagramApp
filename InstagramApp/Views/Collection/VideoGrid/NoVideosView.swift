@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NoVideosView: View {
 
-    let folder: VideoFolderModel
+    let folder: ReelsFolderModel
     var action: DismissAction
 
     var icon: String { folder.name == "Recents" ? "clock.arrow.circlepath" : "folder"}
@@ -47,5 +47,5 @@ struct NoVideosView: View {
 
 #Preview {
     @Previewable @Environment(\.dismiss) var dismiss
-    NoVideosView(folder: VideoFolderModel(clips: [], name: "Recents"), action: dismiss)
+    NoVideosView(folder: ReelsFolderModel(reelsArray: [mockReelsResponse.data.reels], name: "Recents"), action: dismiss)
 }

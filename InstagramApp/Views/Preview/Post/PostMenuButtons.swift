@@ -8,26 +8,27 @@
 import SwiftUI
 
 struct PostMenuButtons: View {
-    let link: String
-    
+    let post: PostModel
+    var mainViewModel: MainViewModel
+
     var body: some View {
         HStack(alignment: .top) {
-            if let url = URL(string: link) {
+            if let url = URL(string: post.imageDownloadUrl ?? "") {
                 ShareLink(item: url) {
                     MenuElement(icon: "square.and.arrow.up", title: "Share")
                 }
             }
 
             Button {
-//                if mainViewModel.clipInfo != nil {
+                if mainViewModel.postData != nil {
 //                    videosViewModel.clipForAdd = mainViewModel.clipInfo
 //                    videosViewModel.showSelectVideoFolders = true
-//                } else { print("clipInfo ПУСТОЙ") }
+                } else { print("postData пустая") }
             } label: { MenuElement(icon: "bookmark", title: "Add to collection...") }
 
             Button {
-//                UIPasteboard.general.string = info.musicTitle
-//                mainViewModel.showTrackNameCopied = true
+                UIPasteboard.general.string = post.description
+                mainViewModel.showTrackNameCopied = true
             } label: { MenuElement(icon: "doc.on.doc", title: "Copy post text") }
         }
         .foregroundStyle(.primary)
@@ -35,5 +36,5 @@ struct PostMenuButtons: View {
 }
 
 #Preview {
-    PostMenuButtons(link: "https://www.youtube.com/watch?v=")
+    PostMenuButtons(post: mockPostResponse.data.post, mainViewModel: MainViewModel())
 }

@@ -9,8 +9,8 @@ import SwiftUI
 
 struct VideoListElement: View {
     let folderIndex: Int
-    var videosViewModel: VideosViewModel
-    let folder: VideoFolderModel
+    var reelsViewModel: ReelsViewModel
+    let folder: ReelsFolderModel
     @Binding var selectedFolderIndex: Int?
     @State var folderIsChoosen: Bool = false
 
@@ -27,9 +27,9 @@ struct VideoListElement: View {
             Spacer()
             if folder.name != "Saved" {
                 EllipsisButton(button1title: "Rename", button1icon: "pencil", button1action: {
-                    videosViewModel.renameFolderPressed(folderName: folder.name)
+                    reelsViewModel.renameFolderPressed(folderName: folder.name)
                 }, button2title: "Delete", button2icon: "trash") {
-                    videosViewModel.deleteFolder(folderIndex: folderIndex)
+                    reelsViewModel.deleteFolder(folderIndex: folderIndex)
                 }
             }
         }
@@ -37,5 +37,5 @@ struct VideoListElement: View {
 }
 
 #Preview {
-    VideoListElement(folderIndex: 0, videosViewModel: VideosViewModel(), folder: VideoFolderModel(clips: [], name: ""), selectedFolderIndex: .constant(0))
+    VideoListElement(folderIndex: 0, reelsViewModel: ReelsViewModel(), folder: ReelsFolderModel(reelsArray: [mockReelsResponse.data.reels], name: ""), selectedFolderIndex: .constant(0))
 }

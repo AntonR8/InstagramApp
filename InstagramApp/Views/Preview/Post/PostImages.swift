@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct PostImages: View {
-    let size = UIScreen.main.bounds.width - 32
+    let post: PostModel
+    
     func showNavPoints() {
         UIPageControl.appearance().currentPageIndicatorTintColor = .black
         UIPageControl.appearance().pageIndicatorTintColor = .gray
@@ -19,14 +20,13 @@ struct PostImages: View {
 
     var body: some View {
             TabView {
-                ForEach(1..<6) { i in
-                    Image("onboarding\(i)")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: size, height: size)
-                        .clipped()
-                        .cornerRadius(16)
-                        .padding(8)
+                ForEach(post.carousel, id: \.self) { imagePreview in
+                    if let imageURL = imagePreview.imageDownloadUrl {
+                        PostImageView(imagePreview: imageURL)
+                    }
+                    if let videoURL = imagePreview.videoDownloadUrl {
+                        PostImageView(imagePreview: videoURL)
+                    }
                 }
         }
         .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.width * 1.2)
@@ -39,5 +39,5 @@ struct PostImages: View {
 }
 
 #Preview {
-    PostImages()
+    PostImages(post: mockPostResponse.data.post)
 }

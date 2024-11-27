@@ -9,48 +9,46 @@ import SwiftUI
 import ApphudSDK
 
 struct PostPreview: View {
-    @Environment(NavigationViewModel.self) var navigationViewModel
-    let count = 4
+    @State var reelsViewModel = ReelsViewModel()
+    var mainViewModel: MainViewModel
+
+    // delete:
+    let post: PostModel
 
     var body: some View {
             VStack {
                 ScrollView {
-                    PostImages()
+                    PostImages(post: post)
                     HStack {
-                        Avatar()
-                        AuthorAndDescription()
+                        Avatar(avatarURL: post.authorAvatar)
+                        AuthorAndDescription(author: post.author, description: post.description)
                     }
                     .padding(.horizontal)
                 }
                 Spacer()
-                PostMenuButtons(link: "")
+                PostMenuButtons(post: post, mainViewModel: mainViewModel)
                 HStack {
-                    CapsuleButton(leftIcon: "arrow.down", title: "Only this one") {
+                    CapsuleButton(leftIcon: "arrow.down", title: "Only this one", backgroundColor: .clear, foregroundColor: .accent, strokeColor: .gray.opacity(0.5)) {
 
                     }
-                    CapsuleButton(title: "Save \(count) images") {
+                    CapsuleButton(title: "Save \(post.carousel.count) images") {
 
                     }
                 }
                 .padding()
         }
         .onAppear{
-//            videosViewModel.loadVideos()
+            reelsViewModel.loadVideos()
         }
         .overlay(alignment: .top) {
-//            PreviewNotifications(mainViewModel: mainViewModel, videosViewModel: videosViewModel)
+            PreviewNotifications(mainViewModel: mainViewModel, reelsViewModel: reelsViewModel)
         }
-
         .navigationTitle("Post")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-        if !Apphud.hasPremiumAccess() {
+            if !Apphud.hasPremiumAccess() {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        navigationViewModel.showPaywall = true
-                    } label: {
-                        ProButtonView()
-                    }
+                    ToolbarProPaywallButton()
                 }
             }
         }
@@ -67,7 +65,7 @@ struct PostPreview: View {
 
 #Preview {
     NavigationStack {
-        PostPreview()
+        PostPreview(mainViewModel: MainViewModel(), post: mockPostResponse.data.post)
             .environment(NavigationViewModel())
     }
 }

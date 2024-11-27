@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SelectVideoFolder: View {
     @State var selectedFolderIndex: Int?
-    @Bindable var videosViewModel: VideosViewModel
+    @Bindable var reelsViewModel: ReelsViewModel
 
 
     var body: some View {
@@ -20,28 +20,28 @@ struct SelectVideoFolder: View {
                     .bold()
                 Spacer()
                 SmallImageButton(leftIcon: "xmark", foregroundStyle: .white, action: {
-                    videosViewModel.showSelectVideoFolders = false
+                    reelsViewModel.showSelectVideoFolders = false
                 })
             }
             .padding()
-            SelectVideoFolderList(selectedFolderIndex: $selectedFolderIndex, videosViewModel: videosViewModel)
+            SelectVideoFolderList(selectedFolderIndex: $selectedFolderIndex, reelsViewModel: reelsViewModel)
             HStack {
                 CapsuleButton(leftIcon: "plus", title: "New folder", backgroundColor: .clear, foregroundColor: .accent) {
-                    videosViewModel.showCreateNewFolderAllert = true
+                    reelsViewModel.showCreateNewFolderAllert = true
                 }
                 CapsuleButton(leftIcon: "checkmark", title: "Save") {
                     if let selectedFolderIndex {
-                        videosViewModel.buttonSaveClipInFolderAction(selectedFolderIndex: selectedFolderIndex)
+                        reelsViewModel.buttonSaveClipInFolderAction(selectedFolderIndex: selectedFolderIndex)
                     }
                 }
                 .disabled(selectedFolderIndex == nil)
             }
             .padding()
         }
-        .renameVideoFolderAllert(videosViewModel: videosViewModel)
+        .renameVideoFolderAllert(reelsViewModel: reelsViewModel)
     }
 }
 
 #Preview {
-    SelectVideoFolder(videosViewModel: VideosViewModel())
+    SelectVideoFolder(reelsViewModel: ReelsViewModel())
 }

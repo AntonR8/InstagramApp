@@ -16,11 +16,19 @@ final class MainViewModel {
     var showSavingAudio = false
     var showAudioSavedToFiles = false
     var showErrorSavingAudio = false
-    var showProgressViewWhileSaving = false
+    var showProgressWhileSavingVideo = false
     var showVideoSaved = false
     var showVideoNOTSaved = false
+    var showTextCopied = false
+    var showProgressWhileSavingImage = false
+    var showImageSaved = false
+    var showErrorSavingImage = false
+    var showProgressWhileSavingStories = false
+    var showStoriesSaved = false
 
-
+    //downloads:
+    var reelsData: ReelsModel?
+    var postData: PostModel?
 
 
 }

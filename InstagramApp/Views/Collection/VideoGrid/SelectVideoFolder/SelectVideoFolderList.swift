@@ -9,14 +9,14 @@ import SwiftUI
 
 struct SelectVideoFolderList: View {
     @Binding var selectedFolderIndex: Int?
-    var videosViewModel: VideosViewModel
+    var reelsViewModel: ReelsViewModel
 
     var body: some View {
         List {
-            if !videosViewModel.videos.isEmpty {
-                ForEach(Array(zip(videosViewModel.videos.indices, videosViewModel.videos)), id: \.0) { index, folder in
+            if !reelsViewModel.reelsArray.isEmpty {
+                ForEach(Array(zip(reelsViewModel.reelsArray.indices, reelsViewModel.reelsArray)), id: \.0) { index, folder in
                     if folder.name != "Recents" {
-                        VideoListElement(folderIndex: index, videosViewModel: videosViewModel, folder: folder, selectedFolderIndex: $selectedFolderIndex)
+                        VideoListElement(folderIndex: index, reelsViewModel: reelsViewModel, folder: folder, selectedFolderIndex: $selectedFolderIndex)
                     }
                 }
             }
@@ -25,5 +25,5 @@ struct SelectVideoFolderList: View {
 }
 
 #Preview {
-    SelectVideoFolderList(selectedFolderIndex: .constant(0), videosViewModel: VideosViewModel())
+    SelectVideoFolderList(selectedFolderIndex: .constant(0), reelsViewModel: ReelsViewModel())
 }

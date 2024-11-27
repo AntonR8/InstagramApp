@@ -10,8 +10,8 @@ import Observation
 
 
 @Observable
-class VideosViewModel {
-    var videos: [VideoFolderModel] {
+class ReelsViewModel {
+    var reelsArray: [ReelsFolderModel] {
         didSet { saveVideos() }
     }
 
@@ -21,12 +21,12 @@ class VideosViewModel {
     var showCreateNewFolderAllert = false
     var showRenameFolderAllert = false
     var showSelectVideoFolders = false
-    var clipForAdd: ClipInfoModel?
-  
+    var reelsForAdd: ReelsModel?
+
     init () {
-        let recents = VideoFolderModel(clips: [], name: "Recents")
-        let saved = VideoFolderModel(clips: [], name: "Saved")
-        self.videos = [recents, saved]
+        let recents = ReelsFolderModel(reelsArray: [], name: "Recents")
+        let saved = ReelsFolderModel(reelsArray: [], name: "Saved")
+        self.reelsArray = [recents, saved]
 
         loadVideos()
         preFetchCovers()
@@ -34,7 +34,7 @@ class VideosViewModel {
 
     // init:
     func saveVideos() {
-        if let encodedData = try? JSONEncoder().encode(videos) {
+        if let encodedData = try? JSONEncoder().encode(reelsArray) {
             UserDefaults.standard.setValue(encodedData, forKey: "videos")
         }
     }
@@ -42,18 +42,18 @@ class VideosViewModel {
     func loadVideos() {
         guard
             let videosData = UserDefaults.standard.data(forKey: "videos"),
-            let savedVideos = try? JSONDecoder().decode([VideoFolderModel].self, from: videosData)
+            let savedVideos = try? JSONDecoder().decode([ReelsFolderModel].self, from: videosData)
         else { return }
-        self.videos = savedVideos
+        self.reelsArray = savedVideos
     }
 
    
 
     func preFetchCovers() {
         var urls: [String] = []
-        for folder in videos {
-            for clip in folder.clips {
-                urls.append(clip.videoPreview)
+        for folder in reelsArray {
+            for reels in folder.reelsArray {
+                urls.append(reels.imagePreview)
             }
         }
         DispatchQueue.global().async {
@@ -63,25 +63,25 @@ class VideosViewModel {
 
     // folders:
     func addFolder(folderName: String) {
-        let newFolder = VideoFolderModel(clips: [], name: folderName)
-        videos.append(newFolder)
+        let newFolder = ReelsFolderModel(reelsArray: [], name: folderName)
+        reelsArray.append(newFolder)
     }
 
     func deleteFolder(folderIndex: Int) {
-        if videos[safe: folderIndex] != nil {
-            if videos[folderIndex].name == "Recents" || videos[folderIndex].name == "Saved" { return }
-            videos.remove(at: folderIndex)
+        if reelsArray[safe: folderIndex] != nil {
+            if reelsArray[folderIndex].name == "Recents" || reelsArray[folderIndex].name == "Saved" { return }
+            reelsArray.remove(at: folderIndex)
         }
     }
 
     func changeFolderName(from oldName: String, to newName: String) {
-        if let index = videos.firstIndex(where: {$0.name == oldName}) {
-            videos[index] = videos[index].changeName(newName: newName)
+        if let index = reelsArray.firstIndex(where: {$0.name == oldName}) {
+            reelsArray[index] = reelsArray[index].changeName(newName: newName)
         }
     }
 
-    func returnFolder(folderName: String) -> VideoFolderModel? {
-        videos.first(where: {$0.name == folderName})
+    func returnFolder(folderName: String) -> ReelsFolderModel? {
+        reelsArray.first(where: {$0.name == folderName})
     }
 
     func renameFolderPressed(folderName: String) {
@@ -91,28 +91,28 @@ class VideosViewModel {
     }
 
     func buttonSaveClipInFolderAction(selectedFolderIndex: Int) {
-        if let clip = clipForAdd {
-            addClip(to: selectedFolderIndex, clip: clip)
+        if let reels = reelsForAdd {
+            addClip(to: selectedFolderIndex, reels: reels)
             showSelectVideoFolders = false
         } else { print("clipForAdd отсутствует, не выбран") }
     }
 
     // clips:
-    func addClip(to folderIndex: Int, clip: ClipInfoModel) {
-        if videos[safe: folderIndex] != nil {
-            videos[folderIndex] = videos[folderIndex].addClip(clip: clip)
-            print("Клип \(clip.description) в \(videos[folderIndex].name) добавлен")
-            if !(videos[folderIndex].name == "Recents") {
+    func addClip(to folderIndex: Int, reels: ReelsModel) {
+        if reelsArray[safe: folderIndex] != nil {
+            reelsArray[folderIndex] = reelsArray[folderIndex].addClip(reels: reels)
+            print("Клип \(reels.description) в \(reelsArray[folderIndex].name) добавлен")
+            if !(reelsArray[folderIndex].name == "Recents") {
                                 showAddedToFolder = true
                             }
         }
     }
 
-    func addClip(to folderName: String, clip: ClipInfoModel) {
-        if let index = videos.firstIndex(where: {$0.name == folderName}) {
-            if videos[index].clips.last?.name != clip.name {
-                videos[index] = videos[index].addClip(clip: clip)
-                print("Клип \(clip.description) в \(folderName) добавлен")
+    func addClip(to folderName: String, reels: ReelsModel) {
+        if let index = reelsArray.firstIndex(where: {$0.name == folderName}) {
+            if reelsArray[index].reelsArray.last?.description != reels.description {
+                reelsArray[index] = reelsArray[index].addClip(reels: reels)
+                print("Клип \(reels.description) в \(folderName) добавлен")
                 if !(folderName == "Recents") {
                     showAddedToFolder = true
                 }
@@ -122,9 +122,9 @@ class VideosViewModel {
         }
     }
 
-    func removeClip(from folderName: String, clip: ClipInfoModel) {
-        if let index = videos.firstIndex(where: {$0.name == folderName}) {
-            videos[index] = videos[index].deleteClip(clip: clip)
+    func removeClip(from folderName: String, reels: ReelsModel) {
+        if let index = reelsArray.firstIndex(where: {$0.name == folderName}) {
+            reelsArray[index] = reelsArray[index].deleteClip(reels: reels)
         }
     }
 
@@ -138,25 +138,25 @@ class VideosViewModel {
         }
     }
 
-    func returnRecentsFolder() -> VideoFolderModel {
+    func returnRecentsFolder() -> ReelsFolderModel {
         guard
-            let recentsFolder = videos.first(where: {$0.name == "Recents"}),
-            recentsFolder.clips.count > 0
-        else { return VideoFolderModel(clips: [], name: "Recents") }
+            let recentsFolder = reelsArray.first(where: {$0.name == "Recents"}),
+            recentsFolder.reelsArray.count > 0
+        else { return ReelsFolderModel(reelsArray: [], name: "Recents") }
         return recentsFolder
     }
 
-    func createRecentFourClips() -> [ClipInfoModel] {
+    func createRecentFourClips() -> [ReelsModel] {
         guard
-            let recentsFolder = videos.first(where: {$0.name == "Recents"}),
-            recentsFolder.clips.count > 0
+            let recentsFolder = reelsArray.first(where: {$0.name == "Recents"}),
+            recentsFolder.reelsArray.count > 0
         else { return [] }
 
-        var clips: [ClipInfoModel] = []
-        for i in 1...recentsFolder.clips.count {
-            let fetchedClip = recentsFolder.clips[recentsFolder.clips.count-i]
-            clips.append(fetchedClip)
+        var reelsArray: [ReelsModel] = []
+        for i in 1...recentsFolder.reelsArray.count {
+            let fetchedReels = recentsFolder.reelsArray[recentsFolder.reelsArray.count-i]
+            reelsArray.append(fetchedReels)
         }
-        return clips
+        return reelsArray
     }
 }

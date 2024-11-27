@@ -6,18 +6,29 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct Avatar: View {
+    let avatarURL: String
     var size: CGFloat = 36
     var body: some View {
-        Image("paywall")
-            .resizable()
-            .scaledToFill()
-            .clipShape(Circle())
+        Circle()
+            .fill(Color.gray.opacity(0.1))
             .frame(width: size, height: size)
+            .overlay {
+                WebImage(url: URL(string: avatarURL)) { image in
+                    image.resizable()
+                } placeholder: {
+                    Circle()
+                        .fill(.gray.opacity(0.001))
+                }
+                .indicator(.activity)
+                .scaledToFill()
+                .clipShape(Circle())
+            }
     }
 }
 
 #Preview {
-    Avatar()
+    Avatar(avatarURL: mockPostResponse.data.post.authorAvatar)
 }

@@ -9,6 +9,7 @@ import SwiftUI
 import ApphudSDK
 
 struct ProfilePreview: View {
+    let profile: ProfileModel
     @Environment(NavigationViewModel.self) var navigationViewModel
 
     var body: some View {
@@ -16,15 +17,15 @@ struct ProfilePreview: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     HStack {
-                        Avatar(size: 80)
-                        ProfileMetrics(publications: 836, subscribers: 2566, subscriptions: 218)
+                        Avatar(avatarURL: profile.avatar, size: 80)
+                        ProfileMetrics(publications: profile.totalPublications, subscribers: profile.totalSubscribers, subscriptions: profile.totalSubscriptions)
                     }
-                    AuthorAndDescription()
-                    ContactsPreview(contacts: ["youtu.be/oKhf382w?", "t.me/cosmosprosto"])
+                    AuthorAndDescription(author: profile.name, description: profile.description)
+                    ContactsPreview(biolinks: profile.bioLinks)
                 }
             }
                 Spacer()
-                ProfileMenuButtons(link: "")
+            ProfileMenuButtons(profile: profile, link: "")
                     CapsuleButton(title: "Save profile avatar") {
                 }
                     .padding(.top)
@@ -62,7 +63,7 @@ struct ProfilePreview: View {
 
 #Preview {
     NavigationStack {
-        ProfilePreview()
+        ProfilePreview(profile: mockProfileResponse.data.profile)
             .environment(NavigationViewModel())
     }
 }

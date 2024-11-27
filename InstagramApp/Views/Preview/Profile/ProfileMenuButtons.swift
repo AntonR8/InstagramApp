@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileMenuButtons: View {
+    let profile: ProfileModel
     let link: String
 
     var body: some View {
@@ -35,5 +36,5 @@ struct ProfileMenuButtons: View {
 }
 
 #Preview {
-    ProfileMenuButtons(link: "https://www.youtube.com/watch?v=")
+    ProfileMenuButtons(profile: mockProfileResponse.data.profile, link: "")
 }

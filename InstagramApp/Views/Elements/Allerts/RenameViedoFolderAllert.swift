@@ -2,21 +2,21 @@
 import SwiftUI
 
 struct RenameVideoFolderAllert: ViewModifier {
-    @Bindable var videosViewModel: VideosViewModel
+    @Bindable var reelsViewModel: ReelsViewModel
 
     func body(content: Content) -> some View {
         content
-            .alert("Rename folder", isPresented: $videosViewModel.showRenameFolderAllert) {
-                TextField("Folder name", text: $videosViewModel.newFolderName)
+            .alert("Rename folder", isPresented: $reelsViewModel.showRenameFolderAllert) {
+                TextField("Folder name", text: $reelsViewModel.newFolderName)
                 Button("Cancel",  action: {
-                    videosViewModel.showRenameFolderAllert = false
+                    reelsViewModel.showRenameFolderAllert = false
                 })
                 .accentColor(.accent)
                 Button("Save", action: {
-                    videosViewModel.changeFolderName(from: videosViewModel.oldFolderName, to: videosViewModel.newFolderName)
-                    videosViewModel.newFolderName = ""
-                    videosViewModel.oldFolderName = ""
-                    videosViewModel.showRenameFolderAllert = false
+                    reelsViewModel.changeFolderName(from: reelsViewModel.oldFolderName, to: reelsViewModel.newFolderName)
+                    reelsViewModel.newFolderName = ""
+                    reelsViewModel.oldFolderName = ""
+                    reelsViewModel.showRenameFolderAllert = false
                 })
             }
     }
@@ -24,7 +24,7 @@ struct RenameVideoFolderAllert: ViewModifier {
 
 
 extension View {
-    func renameVideoFolderAllert(videosViewModel: VideosViewModel) -> some View {
-        modifier(RenameVideoFolderAllert(videosViewModel: videosViewModel))
+    func renameVideoFolderAllert(reelsViewModel: ReelsViewModel) -> some View {
+        modifier(RenameVideoFolderAllert(reelsViewModel: reelsViewModel))
     }
 }

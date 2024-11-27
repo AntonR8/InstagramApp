@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct AddedtoFolderNotification: View {
-    var videosViewModel: VideosViewModel
+    var reelsViewModel: ReelsViewModel
 
     var body: some View {
         CapsuleNotification(message: "Added to folder")
             .onAppear{
                 DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                    videosViewModel.showAddedToFolder = false
+                    reelsViewModel.showAddedToFolder = false
                 }
             }
     }
 }
 
 #Preview {
-    AddedtoFolderNotification(videosViewModel: VideosViewModel())
+    AddedtoFolderNotification(reelsViewModel: ReelsViewModel())
 }

@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct VideoGrid: View {
-    var videosViewModel: VideosViewModel
+    var reelsViewModel: ReelsViewModel
 
     var body: some View {
         LazyVGrid(columns: [GridItem(), GridItem()], spacing: 16,content: {
-            ForEach(Array(zip(videosViewModel.videos.indices, videosViewModel.videos)), id: \.0) { index, folder in
-                VideoGridElement(videosViewModel: videosViewModel, folder: folder, folderIndex: index, icon: videosViewModel.returnIcon(folderName: folder.name))
+            ForEach(Array(zip(reelsViewModel.reelsArray.indices, reelsViewModel.reelsArray)), id: \.0) { index, folder in
+                VideoGridElement(reelsViewModel: reelsViewModel, folder: folder, folderIndex: index, icon: reelsViewModel.returnIcon(folderName: folder.name))
             }
         })
         .onAppear{
-            videosViewModel.loadVideos()
+            reelsViewModel.loadVideos()
         }
-        .newVideoFolderAllert(videosViewModel: videosViewModel)
+        .newVideoFolderAllert(reelsViewModel: reelsViewModel)
 
     }
 }
 
 #Preview { 
-    VideoGrid(videosViewModel: VideosViewModel())
+    VideoGrid(reelsViewModel: ReelsViewModel())
 }

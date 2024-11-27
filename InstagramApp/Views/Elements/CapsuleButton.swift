@@ -13,6 +13,7 @@ struct CapsuleButton: View {
     var rightIcon: String?
     var backgroundColor: Color?
     var foregroundColor: Color?
+    var strokeColor: Color?
     let action: () -> Void
 
     var body: some View {
@@ -30,10 +31,10 @@ struct CapsuleButton: View {
             }
             .foregroundStyle(foregroundColor ?? .white)
             .frame(maxWidth: .infinity)
-            .frame(height:  44)
+            .frame(height:  52)
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(.accent, lineWidth: 1)
+                    .stroke(strokeColor ?? .accent, lineWidth: 1)
                     .fill(backgroundColor ?? .accent)
             )
             .padding(1)

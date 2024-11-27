@@ -6,35 +6,35 @@ class DownloadManager {
     let tokenvalue = "0118a46e-50df-4c72-8442-63043b863a69"
     let domen = "https://backendapppoint.space/"
 
-    func postTikTokRequest(link: String ,completionHandler: @escaping (String) -> ()) {
-        let URLString = "\(domen)api/tiktokDownload"
-        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
-        let url = URL(string: URLString)!
-        AF.request(url, method: .post, parameters: parameters)
-          .validate()
-          .responseDecodable(of: DownloadLinkResponse.self) { response in
-                switch response.result {
-                case .success(let receivedData):
-                    print("TikTokDownload response.error : \(String(describing: receivedData.error))")
-                    print("TikTokDownload response.messages = \(String(describing: receivedData.messages.count))")
-                    let tikTokdownloadLink: String = receivedData.data.url
-                    completionHandler(tikTokdownloadLink)
-                case .failure(let error):
-                    print("Ошибка получения данных TikTokDownload: \(error)")
-                }
-            }
-    }
+//    func postTikTokRequest(link: String ,completionHandler: @escaping (String) -> ()) {
+//        let URLString = "\(domen)api/tiktokDownload"
+//        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
+//        let url = URL(string: URLString)!
+//        AF.request(url, method: .post, parameters: parameters)
+//          .validate()
+//          .responseDecodable(of: DownloadLinkResponse.self) { response in
+//                switch response.result {
+//                case .success(let receivedData):
+//                    print("TikTokDownload response.error : \(String(describing: receivedData.error))")
+//                    print("TikTokDownload response.messages = \(String(describing: receivedData.messages.count))")
+//                    let tikTokdownloadLink: String = receivedData.data.url
+//                    completionHandler(tikTokdownloadLink)
+//                case .failure(let error):
+//                    print("Ошибка получения данных TikTokDownload: \(error)")
+//                }
+//            }
+//    }
 
-    func getClipInfo(link: String ,completionHandler: @escaping (AFDataResponse<ClipInfoResponse>) -> ()) {
-        let URLString = "\(domen)api/clipInfo?url=https://vt.tiktok.com/ZS2c7RWu6/"
-        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
-        let url = URL(string: URLString)!
-        AF.request(url, method: .get, parameters: parameters)
-          .validate()
-          .responseDecodable(of: ClipInfoResponse.self) { response in
-              completionHandler(response)
-            }
-    }
+//    func getClipInfo(link: String ,completionHandler: @escaping (AFDataResponse<ClipInfoResponse>) -> ()) {
+//        let URLString = "\(domen)api/clipInfo?url=https://vt.tiktok.com/ZS2c7RWu6/"
+//        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
+//        let url = URL(string: URLString)!
+//        AF.request(url, method: .get, parameters: parameters)
+//          .validate()
+//          .responseDecodable(of: ClipInfoResponse.self) { response in
+//              completionHandler(response)
+//            }
+//    }
 
     func getMusicTrends(completionHandler: @escaping ([SectionModel]) -> ()) {
         let URLString = "\(domen)api/collection?lang=en"

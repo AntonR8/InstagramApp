@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct RecentsFolderLabel: View {
-    var videosViewModel: VideosViewModel
+    var reelsViewModel: ReelsViewModel
 
     let folderSize: CGFloat = UIScreen.main.bounds.width/2 - 24
     let frameCornerRadius: CGFloat = 20
@@ -20,20 +20,20 @@ struct RecentsFolderLabel: View {
                             RecentsFolderLabelElement(
                                 folderSize: folderSize,
                                 number: number,
-                                recentsFolderCount: videosViewModel.returnRecentsFolder().clips.count,
-                                recentsFourclips: videosViewModel.createRecentFourClips()
+                                recentsFolderCount: reelsViewModel.returnRecentsFolder().reelsArray.count,
+                                recentsFourclips: reelsViewModel.createRecentFourClips()
                             )
                         }
                     })
                 .padding(12)
             }
             .onAppear {
-                videosViewModel.loadVideos()
+                reelsViewModel.loadVideos()
             }
     }
 }
 
 #Preview {
-    RecentsFolderLabel(videosViewModel: VideosViewModel())
+    RecentsFolderLabel(reelsViewModel: ReelsViewModel())
 
 }

@@ -12,8 +12,8 @@ struct EllipsisButton: View {
     var foregroundStyle: Color?
 
     var musicfolder: MusicFolderModel?
-    var videofolder: VideoFolderModel?
-    var clip: ClipInfoModel?
+    var reelsfolder: ReelsFolderModel?
+    var reels: ReelsModel?
 
     let button1title: String
     let button1icon: String
