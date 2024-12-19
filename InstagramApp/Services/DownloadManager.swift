@@ -2,43 +2,68 @@ import SwiftUI
 import Alamofire
 
 class DownloadManager {
-    let token = "token"
-    let tokenvalue = "0118a46e-50df-4c72-8442-63043b863a69"
-    let domen = "https://backendapppoint.space/"
+    let token = Constants.BackEnd.token
+    let tokenvalue = Constants.BackEnd.tokenvalue
+    let domen = Constants.BackEnd.domen
 
-//    func postTikTokRequest(link: String ,completionHandler: @escaping (String) -> ()) {
-//        let URLString = "\(domen)api/tiktokDownload"
-//        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
-//        let url = URL(string: URLString)!
-//        AF.request(url, method: .post, parameters: parameters)
-//          .validate()
-//          .responseDecodable(of: DownloadLinkResponse.self) { response in
-//                switch response.result {
-//                case .success(let receivedData):
-//                    print("TikTokDownload response.error : \(String(describing: receivedData.error))")
-//                    print("TikTokDownload response.messages = \(String(describing: receivedData.messages.count))")
-//                    let tikTokdownloadLink: String = receivedData.data.url
-//                    completionHandler(tikTokdownloadLink)
-//                case .failure(let error):
-//                    print("Ошибка получения данных TikTokDownload: \(error)")
-//                }
-//            }
-//    }
+    func getReelsData(link: String ,completionHandler: @escaping (AFDataResponse<ReelsResponse>) -> ()) {
+        let URLString = "\(domen)api/reels"
+        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
+        let url = URL(string: URLString)!
+        AF.request(url, method: .get, parameters: parameters)
+          .validate()
+          .responseDecodable(of: ReelsResponse.self) { response in
+              completionHandler(response)
+            }
+    }
 
-//    func getClipInfo(link: String ,completionHandler: @escaping (AFDataResponse<ClipInfoResponse>) -> ()) {
-//        let URLString = "\(domen)api/clipInfo?url=https://vt.tiktok.com/ZS2c7RWu6/"
-//        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
-//        let url = URL(string: URLString)!
-//        AF.request(url, method: .get, parameters: parameters)
-//          .validate()
-//          .responseDecodable(of: ClipInfoResponse.self) { response in
-//              completionHandler(response)
-//            }
-//    }
+    func getPostData(link: String ,completionHandler: @escaping (AFDataResponse<PostResponse>) -> ()) {
+        let URLString = "\(domen)api/post"
+        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
+        let url = URL(string: URLString)!
+        AF.request(url, method: .get, parameters: parameters)
+          .validate()
+          .responseDecodable(of: PostResponse.self) { response in
+              completionHandler(response)
+            }
+    }
+
+    func getProfileData(link: String ,completionHandler: @escaping (AFDataResponse<ProfileResponse>) -> ()) {
+        let URLString = "\(domen)api/profile"
+        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
+        let url = URL(string: URLString)!
+        AF.request(url, method: .get, parameters: parameters)
+          .validate()
+          .responseDecodable(of: ProfileResponse.self) { response in
+              completionHandler(response)
+            }
+    }
+
+    func getStoriesData(link: String ,completionHandler: @escaping (AFDataResponse<StoriesResponse>) -> ()) {
+        let URLString = "\(domen)api/story"
+        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
+        let url = URL(string: URLString)!
+        AF.request(url, method: .get, parameters: parameters)
+          .validate()
+          .responseDecodable(of: StoriesResponse.self) { response in
+              completionHandler(response)
+            }
+    }
+
+    func getProfileStoriesData(link: String ,completionHandler: @escaping (AFDataResponse<ProfileStoriesResponse>) -> ()) {
+        let URLString = "\(domen)api/profile/stories"
+        let parameters: [String:String] = [ "url": link, token: tokenvalue ]
+        let url = URL(string: URLString)!
+        AF.request(url, method: .get, parameters: parameters)
+          .validate()
+          .responseDecodable(of: ProfileStoriesResponse.self) { response in
+              completionHandler(response)
+            }
+    }
 
     func getMusicTrends(completionHandler: @escaping ([SectionModel]) -> ()) {
         let URLString = "\(domen)api/collection?lang=en"
-        let parameters: [String:String] = [ token: tokenvalue ]
+        let parameters: [String:String] = [ token: tokenvalue, "n": "1" ]
         let url = URL(string: URLString)!
 
         AF.request(url, method: .get, parameters: parameters)
@@ -48,6 +73,7 @@ class DownloadManager {
                 case .success(let receivedData):
                     print("MusicTrends response.error : \(String(describing: receivedData.error))")
                     print("MusicTrends response.messages = \(String(describing: receivedData.messages.count))")
+                    print("MusicTrends: \(receivedData.data.count)")
                     let trendsMusic: [SectionModel] = receivedData.data
                     completionHandler(trendsMusic)
                 case .failure(let error):

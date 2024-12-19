@@ -9,10 +9,12 @@ import SwiftUI
 import ApphudSDK
 
 struct ProfilePreview: View {
-    let profile: ProfileModel
+    @State var profilesViewModel = ProfilesViewModel()
     @Environment(NavigationViewModel.self) var navigationViewModel
+    let profile: ProfileModel
 
     var body: some View {
+        @Bindable var navigationViewModel = navigationViewModel
         VStack {
             ScrollView {
                 VStack(alignment: .leading) {
@@ -25,19 +27,25 @@ struct ProfilePreview: View {
                 }
             }
                 Spacer()
-            ProfileMenuButtons(profile: profile, link: "")
-                    CapsuleButton(title: "Save profile avatar") {
+            ProfileMenuButtons(profilesViewModel: profilesViewModel, profile: profile, link: profile.requestedUrl)
+            CapsuleButton(title: "Save profile avatar") {
+                Task {
+                    await profilesViewModel.saveImageToGallery(imageURL: profile.avatar)
+                    
                 }
+                profilesViewModel.showImageSaved = true
+            }
                     .padding(.top)
         }
         .onAppear{
-//            videosViewModel.loadVideos()
+            profilesViewModel.loadProfiles()
+            profilesViewModel.addProfile(to: "Recents", profileForAdd: profile) 
         }
         .overlay(alignment: .top) {
-//            PreviewNotifications(mainViewModel: mainViewModel, videosViewModel: videosViewModel)
+            PreviewNotifications(profilesViewModel: profilesViewModel)
         }
         .padding()
-        .navigationTitle("Post")
+        .navigationTitle("Profile")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
         if !Apphud.hasPremiumAccess() {
@@ -50,14 +58,14 @@ struct ProfilePreview: View {
                 }
             }
         }
-//        .sheet(isPresented: $videosViewModel.showSelectVideoFolders) {
-//            SelectVideoFolder(videosViewModel: videosViewModel)
-//                .presentationDetents([.medium])
-//        }
-//        .popover(isPresented: $mainViewModel.showRateMeView, content: {
-//            RateMeView(mainViewModel: mainViewModel)
-//        })
-//        .newVideoFolderAllert(videosViewModel: videosViewModel)
+        .sheet(isPresented: $profilesViewModel.showSelectProfileFolders) {
+            SelectProfilesFolder(profilesViewModel: profilesViewModel)
+                .presentationDetents([.medium])
+        }
+        .popover(isPresented: $navigationViewModel.showRateMeView, content: {
+            RateMeView()
+        })
+        .newProfileFolderAllert(profilesViewModel: profilesViewModel)
     }
 }
 

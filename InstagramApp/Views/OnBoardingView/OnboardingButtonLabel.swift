@@ -14,7 +14,7 @@ struct OnboardingButtonLabel: View {
         Text(title ?? "")
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
-            .frame(height: 44)
+            .frame(height: 52)
             .background(
                 RoundedRectangle(cornerRadius: 14)
                     .fill(.accent)

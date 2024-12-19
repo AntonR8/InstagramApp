@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct StoriesTabView: View {
-    let stories: StoriesModel
+    let stories: StoriesModel?
     let profileStories: [ProfileStoriesModel]
+    @Binding var currentStories: ProfileStoriesModel?
 
     func showNavPoints() {
         UIPageControl.appearance().currentPageIndicatorTintColor = .black
@@ -22,22 +23,29 @@ struct StoriesTabView: View {
     
     var body: some View {
         TabView {
-            if let videoURL = stories.videoDownloadURL {
-                StoriesVideoPreview(videoDownloadURL: videoURL, imagePreview: stories.imagePreview, authorAvatar: stories.authorAvatar, author: stories.author, sinceStr: stories.sinceStr)
+            if let stories {
+            if let videoURL = stories.videoDownloadUrl {
+                StoriesVideoPreview(videoDownloadURL: videoURL, imagePreview: stories.imageDownloadUrl, authorAvatar: stories.authorAvatar, author: stories.author, sinceStr: stories.sinceStr)
             } else {
-                StoriesImagePreview(imagePreview: stories.imagePreview, authorAvatar: stories.authorAvatar, author: stories.author, sinceStr: stories.sinceStr)
+                StoriesImagePreview(imagePreview: stories.imageDownloadUrl, authorAvatar: stories.authorAvatar, author: stories.author, sinceStr: stories.sinceStr)
             }
-
+        }
             ForEach(profileStories, id: \.self) { profileStory in
                 if let videoURL = profileStory.videoDownloadUrl {
                     StoriesVideoPreview(videoDownloadURL: videoURL, imagePreview: profileStory.imageDownloadUrl, authorAvatar: profileStory.avatar, author: profileStory.name, sinceStr: profileStory.sinceStr)
+                        .onAppear {
+                            currentStories = profileStory
+                        }
                 } else {
                     StoriesImagePreview(imagePreview: profileStory.imageDownloadUrl, authorAvatar: profileStory.avatar, author: profileStory.name, sinceStr: profileStory.sinceStr)
+                        .onAppear {
+                            currentStories = profileStory
+                        }
                 }
             }
 
         }
-        //            .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.width * 1.2)
+                    .frame(maxWidth: .infinity, minHeight: (UIScreen.main.bounds.width - 100)*16/9 + 80)
         .tabViewStyle(.page)
         .onAppear {
             showNavPoints()
@@ -47,7 +55,7 @@ struct StoriesTabView: View {
 
 #Preview {
     StoriesTabView(
-        stories: mockStoriesResponse.data.stories,
-        profileStories: mockProfileStoriesResponse.data.stories.array
+        stories: mockStoriesResponse.data.story,
+        profileStories: mockProfileStoriesResponse.data.profileStories.items, currentStories: .constant(nil)
     )
 }

@@ -1,30 +1,22 @@
-//
-//  StoriesMenuView.swift
-//  InstagramApp
-//
-//  Created by Антон Разгуляев on 26.11.2024.
-//
 
 import SwiftUI
 
 struct StoriesMenuView: View {
-    var reelsViewModel: ReelsViewModel
-    var mainViewModel: MainViewModel
-    let stories: StoriesModel
+    var storiesViewModel: StoriesViewModel
+    let stories: (StoriesModel, [ProfileStoriesModel])
 
     var body: some View {
         HStack(alignment: .top) {
-            if let url = URL(string: stories.requestedUrl) {
-                ShareLink(item: url) {
-                    MenuElement(icon: "square.and.arrow.up", title: "Share video")
+            if let url = URL(string: stories.0.requestedUrl ?? "") {
+                    ShareLink(item: url) {
+                        MenuElement(icon: "square.and.arrow.up", title: "Share")
+                    }
                 }
-            }
 
             Button {
-                if mainViewModel.reelsData != nil {
-                    reelsViewModel.reelsForAdd = mainViewModel.reelsData
-                    reelsViewModel.showSelectVideoFolders = true
-                } else { print("clipInfo ПУСТОЙ") }
+                storiesViewModel.storiesForAdd = stories.0
+                storiesViewModel.showSelectStoriesFolders = true
+
             } label: { MenuElement(icon: "bookmark", title: "Add...") }
 
         }
@@ -33,5 +25,5 @@ struct StoriesMenuView: View {
 }
 
 #Preview {
-    StoriesMenuView(reelsViewModel: ReelsViewModel(), mainViewModel: MainViewModel(), stories: mockStoriesResponse.data.stories)
+    StoriesMenuView(storiesViewModel: StoriesViewModel(), stories: (mockStoriesResponse.data.story, mockProfileStoriesResponse.data.profileStories.items))
 }

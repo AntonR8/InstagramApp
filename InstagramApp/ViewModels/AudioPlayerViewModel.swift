@@ -49,16 +49,12 @@ final class AudioPlayerViewModel {
         }
    }
 
-
-
-
     func setupAudio(trackURL: String) async {
         guard let url = URL(string: trackURL) else { return }
         player = AVPlayer(url: url)
         do { totalTime = try await player?.currentItem?.asset.load(.duration).seconds ?? 0 }
         catch let error { print(error) }
     }
-
 
     func albumPlayButtonPushed(index: Int) {
         Task {
@@ -76,8 +72,6 @@ final class AudioPlayerViewModel {
             }
         }
     }
-
-
 
     // Управление плеером:
     func closeButtonPushed() {

@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct TrackNameCopiedNotification: View {
-    var mainViewModel: MainViewModel
+    var reelsViewModel: ReelsViewModel
     var body: some View {
         CapsuleNotification(message: "Track name copied")
             .onAppear{
                 DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                    mainViewModel.showTrackNameCopied = false
+                    reelsViewModel.showTrackNameCopied = false
                 }
             }
     }
 }
 
 #Preview {
-    TrackNameCopiedNotification(mainViewModel: MainViewModel())
+    TrackNameCopiedNotification(reelsViewModel: ReelsViewModel())
 }

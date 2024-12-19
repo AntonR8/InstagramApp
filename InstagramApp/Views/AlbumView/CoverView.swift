@@ -28,7 +28,6 @@ struct CoverView: View {
                                 }
                             }
                         }
-
                 }
                 Spacer()
                 Text(country.title)

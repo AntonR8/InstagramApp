@@ -29,5 +29,4 @@ struct SeeAllButton: View {
 
 #Preview {
     SeeAllButton(destination: AnyView(TrendsView()))
-        .environment(NavigationViewModel())
 }

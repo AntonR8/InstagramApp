@@ -10,7 +10,6 @@ import ApphudSDK
 
 struct PaywallView: View {
     @State var paywallViewModel = PaywallViewModel()
-    @AppStorage("firstRun") var firstRun = true
     @State var showCloseButton: Bool = false
 
 
@@ -31,12 +30,13 @@ struct PaywallView: View {
                     .font(.footnote)
                     .padding(.top)
                 if !paywallViewModel.disableContinueButton() {
-                    CapsuleButton(leftIcon: "", title: "Continue", rightIcon: "arrow.forward" ,action: {
+                    CapsuleButton(title: "Continue", rightIcon: "arrow.forward" ,action: {
                         paywallViewModel.makePurchase()
                     })
                     .padding(.vertical)
                 }
                 PrivacyPolicyLinks(paywallViewModel: paywallViewModel)
+                    .padding(.vertical, 8)
             }
             .padding(.horizontal)
             .onAppear {

@@ -11,14 +11,14 @@ struct PostData: Codable {
     let post: PostModel
 }
 
-struct PostModel: Codable {
-    let description, author: String
-    let authorProfile: String
-    let authorAvatar: String
+struct PostModel: Codable, Hashable {
+    let description, author: String?
+    let authorProfile: String?
+    let authorAvatar: String?
     let carousel: [Carousel]
     let imageDownloadUrl: String?
     let videoDownloadUrl: String?
-    let requestedUrl: String
+    let requestedUrl: String?
 }
 
 struct Carousel: Codable, Hashable {
@@ -26,9 +26,31 @@ struct Carousel: Codable, Hashable {
     let imageDownloadUrl: String?
 }
 
+struct PostFolderModel: Codable, Hashable {
+    let postsArray: [PostModel]
+    let name: String
+
+    func addPosts(posts: PostModel) -> PostFolderModel {
+        var instansePosts: [PostModel] = postsArray
+        instansePosts.append(posts)
+        return PostFolderModel(postsArray: instansePosts, name: name)
+    }
+
+    func deletePost(post: PostModel) -> PostFolderModel {
+        var instansePosts: [PostModel] = postsArray
+        if let index = instansePosts.firstIndex(where: {$0.imageDownloadUrl == post.imageDownloadUrl}) {
+            instansePosts.remove(at: index)
+        }
+        return PostFolderModel(postsArray: instansePosts, name: name)
+    }
+
+    func changeName(newName: String) -> PostFolderModel {
+        return PostFolderModel(postsArray: postsArray, name: newName)
+    }
+}
 
 
-
+// MARK: - MockData
 
 let mockPostResponse = PostResponse(
     error: false,

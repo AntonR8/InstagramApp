@@ -1,23 +1,18 @@
-//
-//  videoPreview.swift
-//  TikTokApp
-//
-//  Created by Антон Разгуляев on 17.10.2024.
-//
 
 import SwiftUI
 import SDWebImageSwiftUI
 
 struct ReelsVideoPreview: View {
     let reels: ReelsModel
+    let widthSize = UIScreen.main.bounds.width - 100
 
     var body: some View {
         NavigationLink {
-            VideoPlayerView(url: reels.videoDownloadURL)
+            VideoPlayerView(url: reels.videoDownloadUrl)
         } label: {
             RoundedRectangle(cornerRadius: 25)
                 .fill(Color.gray.opacity(0.1))
-                .frame(width: 286, height: 508)
+                .frame(width: widthSize, height: widthSize*16/9)
                 .overlay {
                     WebImage(url: URL(string: reels.imagePreview)) { image in
                         image.resizable()
@@ -30,14 +25,14 @@ struct ReelsVideoPreview: View {
                     .cornerRadius(25)
                 }
         }
-        .overlay(alignment: .bottom) {
+        .overlay(alignment: .bottomLeading) {
             ReelsClipInfo(reels: reels)
                 .padding(.bottom)
                 .padding(.leading, 8)
         }
         .overlay {
             NavigationLink {
-                VideoPlayerView(url: reels.videoDownloadURL)
+                VideoPlayerView(url: reels.videoDownloadUrl)
             } label: {
                 Image(systemName: "play.fill")
                     .font(.largeTitle)

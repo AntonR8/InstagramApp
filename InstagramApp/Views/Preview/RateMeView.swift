@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct RateMeView: View {
-
+    @Environment(NavigationViewModel.self) var navigationViewModel
     @Environment(\.openURL) private var openURL
-    var mainViewModel: MainViewModel
 
    private  func requestReviewManually() {
         let url = Constants.FormalLinks.requestReviewManuallyURL
@@ -22,12 +21,12 @@ struct RateMeView: View {
     
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            Color.white.ignoresSafeArea()
         VStack {
             HStack {
                 Spacer()
                 SmallImageButton(leftIcon: "xmark", foregroundStyle: .white, action: {
-                    mainViewModel.showRateMeView = false
+                    navigationViewModel.showRateMeView = false
                 })
                 .padding()
             }
@@ -44,11 +43,12 @@ struct RateMeView: View {
                 .padding()
             VStack {
                 CapsuleButton(leftIcon: "heart.fill", title: "Yes, I love it!") {
+                    navigationViewModel.hasRated = true
                     requestReviewManually()
                 }
                 
                 CapsuleButton(title: "No, i don't", backgroundColor: .clear, foregroundColor: .accent) {
-                    mainViewModel.showRateMeView = false
+                    navigationViewModel.showRateMeView = false
                 }
             }
             .frame(maxWidth: 200)
@@ -59,5 +59,6 @@ struct RateMeView: View {
 }
 
 #Preview {
-    RateMeView(mainViewModel: MainViewModel())
+    RateMeView()
+        .environment(NavigationViewModel())
 }

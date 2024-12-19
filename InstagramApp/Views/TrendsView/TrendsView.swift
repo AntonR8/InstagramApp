@@ -27,6 +27,6 @@ struct TrendsView: View {
 #Preview {
     NavigationStack {
         TrendsView()
-            .environment(NavigationViewModel())
     }
+    .environment(NavigationViewModel())
 }

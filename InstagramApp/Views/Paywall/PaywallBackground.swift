@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PaywallBackground: View {
     var body: some View {
+
         VStack {
             Image("paywall")
                 .resizable()
@@ -19,7 +20,10 @@ struct PaywallBackground: View {
         .overlay {
             VStack {
                 Spacer()
-                LinearGradient(colors: [.white, .white, .clear], startPoint: .bottom, endPoint: .top)
+                Image("bottomShadow")
+                    .resizable()
+                    .scaledToFit()
+                    .padding(.bottom, 160)
             }
         }
     }

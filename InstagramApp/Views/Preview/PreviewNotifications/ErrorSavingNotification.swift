@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct ErrorSavingVideoNotification: View {
-    var mainViewModel: MainViewModel
+    var reelsViewModel: ReelsViewModel
 
     var body: some View {
         CapsuleNotification(message: "Error saving video", isErrorNotification: true)
             .onAppear{
                 DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                    mainViewModel.showVideoNOTSaved = false
+                    reelsViewModel.showVideoNOTSaved = false
                 }
             }
 
@@ -22,5 +22,5 @@ struct ErrorSavingVideoNotification: View {
 }
 
 #Preview {
-    ErrorSavingVideoNotification(mainViewModel: MainViewModel())
+    ErrorSavingVideoNotification(reelsViewModel: ReelsViewModel())
 }

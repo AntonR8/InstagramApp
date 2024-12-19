@@ -16,12 +16,9 @@ struct StartView: View {
             MainTabView()
             if firstRun {
                     FirstRunLaunchScreen()
-            } else {
-                LaunchScreen()
-                    .opacity(navigationViewModel.launchScreenOpacity)
-            }
+            } 
         }
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(.light)
     }
 }
 

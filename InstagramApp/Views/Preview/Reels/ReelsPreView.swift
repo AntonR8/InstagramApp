@@ -12,31 +12,31 @@ import ApphudSDK
 struct ReelsPreView: View {
     @Environment(NavigationViewModel.self) var navigationViewModel
     @State var reelsViewModel = ReelsViewModel()
-    @Bindable var mainViewModel: MainViewModel
-    let reels: ReelsModel
+    let reelsData: ReelsModel
 
     var body: some View {
+        @Bindable var navigationViewModel = navigationViewModel
         VStack {
-            if let reelsData = mainViewModel.reelsData {
-                ReelsVideoPreview(reels: reels)
-                ReelsMenuView(reelsViewModel: reelsViewModel, mainViewModel: mainViewModel, reels: reels)
+            ScrollView(showsIndicators: false) {
+                ReelsVideoPreview(reels: reelsData)
+                ReelsMenuView(reelsViewModel: reelsViewModel, reels: reelsData)
                     .padding(.bottom)
-                CapsuleButton(leftIcon: "crown", title: "Save HD", action: {
-//                    if mainViewModel.freeSavingsRemain() {
-//                        mainViewModel.downloadAndSaveVideoToGallery()
-//                    } else {
-//                        navigationViewModel.showPaywall = true
-//                    }
-                })
-            } else {
-                ProgressView()
             }
+            CapsuleButton(leftIcon: "crown", title: "Save HD", action: {
+                if RestrictionsManager.shared.freeSavingsRemain() {
+                    reelsViewModel.downloadAndSaveVideoToGallery(link: reelsData.videoDownloadUrl)
+                } else {
+                    navigationViewModel.showPaywall = true
+                }
+            })
+            .padding(.bottom)
         }
         .onAppear{
             reelsViewModel.loadVideos()
+            reelsViewModel.addReels(to: "Recents", reelsForAdd: reelsData)
         }
         .overlay(alignment: .top) {
-            PreviewNotifications(mainViewModel: mainViewModel, reelsViewModel: reelsViewModel)
+            PreviewNotifications(reelsViewModel: reelsViewModel)
         }
         .padding(.horizontal)
         .navigationTitle("Reels")
@@ -53,18 +53,20 @@ struct ReelsPreView: View {
             }
         }
         .sheet(isPresented: $reelsViewModel.showSelectVideoFolders) {
-            SelectVideoFolder(reelsViewModel: reelsViewModel)
+            SelectReelsFolder(reelsViewModel: reelsViewModel)
                 .presentationDetents([.medium])
         }
-        .popover(isPresented: $mainViewModel.showRateMeView, content: {
-            RateMeView(mainViewModel: mainViewModel)
+        .popover(isPresented: $navigationViewModel.showRateMeView, content: {
+            RateMeView()
         })
-        .newVideoFolderAllert(reelsViewModel: reelsViewModel)
+        .newReelsFolderAllert(reelsViewModel: reelsViewModel)
     }
 }
 
 #Preview {
-    ReelsPreView(mainViewModel: MainViewModel(), reels: mockReelsResponse.data.reels)
-        .environment(NavigationViewModel())
+    NavigationStack {
+        ReelsPreView(reelsData: mockReelsResponse.data.reels)
+            .environment(NavigationViewModel())
+    }
 }
 

@@ -11,7 +11,7 @@ import SwiftUI
 struct InstagramAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StartView()
                 .environment(NavigationViewModel())
         }
     }

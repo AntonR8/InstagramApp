@@ -26,6 +26,7 @@ struct LaunchScreen: View {
                     .clipShape(RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)) 
                     .shadow(color: .black, radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: 5, y: 5)
                     .onAppear{
+                        navigationViewModel.userViews += 1
                         DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
                             withAnimation {
                                 size = 150

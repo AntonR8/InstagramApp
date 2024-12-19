@@ -9,7 +9,7 @@ import SwiftUI
 
 struct XButton: View {
     let systemName: String = "xmark"
-    let foregroundStyle: Color = .white
+    let foregroundStyle: Color = .black
     let strokeColor: Color = .gray.opacity(0.7)
     let action: () -> Void
     var body: some View {

@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct ErrorSavingAudioNotification: View {
-    var mainViewModel: MainViewModel
+    var reelsViewModel: ReelsViewModel
 
     var body: some View {
         CapsuleNotification(message: "Error saving audio from video", isErrorNotification: true)
             .onAppear{
                 DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                    mainViewModel.showErrorSavingAudio = false
+                    reelsViewModel.showErrorSavingAudio = false
                 }
             }
     }
 }
 
 #Preview {
-    ErrorSavingAudioNotification(mainViewModel: MainViewModel())
+    ErrorSavingAudioNotification(reelsViewModel: ReelsViewModel())
 }

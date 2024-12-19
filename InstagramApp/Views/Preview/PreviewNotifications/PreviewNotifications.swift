@@ -1,74 +1,107 @@
-//
-//  PreviewNotifications.swift
-//  TikTokApp
-//
-//  Created by АнтохаПрограммист on 04.11.2024.
-//
 
 import SwiftUI
 
 struct PreviewNotifications: View {
-    
-    var mainViewModel: MainViewModel
-    var reelsViewModel: ReelsViewModel
+    var reelsViewModel: ReelsViewModel?
+    var postsViewModel: PostsViewModel?
+    var profilesViewModel: ProfilesViewModel?
+    var storiesViewModel: StoriesViewModel?
+
     var body: some View {
         VStack {
 
-            if reelsViewModel.showAddedToFolder {
-                AddedtoFolderNotification(reelsViewModel: reelsViewModel)
+            if let reelsViewModel {
+                if reelsViewModel.showAddedToFolder {
+                    AddedtoFolderNotification(reelsViewModel: reelsViewModel)
+                }
+
+                if reelsViewModel.showTrackNameCopied {
+                    TrackNameCopiedNotification(reelsViewModel: reelsViewModel)
+                }
+
+                if reelsViewModel.showSavingAudio {
+                    CapsuleNotification(message: "Saving audio from video", isLoading: true)
+                }
+                if reelsViewModel.showAudioSavedToFiles {
+                    AudioSavedNotification(reelsViewModel: reelsViewModel)
+                }
+
+                if reelsViewModel.showErrorSavingAudio {
+                    ErrorSavingAudioNotification(reelsViewModel: reelsViewModel)
+                }
+
+                if reelsViewModel.showProgressWhileSavingVideo {
+                    CapsuleNotification(message: "Saving video", isLoading: true)
+                }
+
+                if reelsViewModel.showVideoSaved {
+                    VideoSavedNotification(reelsViewModel: reelsViewModel)
+                }
+
+                if reelsViewModel.showVideoNOTSaved {
+                    ErrorSavingVideoNotification(reelsViewModel: reelsViewModel)
+                }
             }
 
-            if mainViewModel.showTrackNameCopied {
-                TrackNameCopiedNotification(mainViewModel: mainViewModel)
+            if let postsViewModel {
+                if postsViewModel.showTextCopied {
+                    TextCopiedNotification(postsViewModel: postsViewModel)
+                }
+
+                if postsViewModel.showProgressWhileSavingImage {
+                    CapsuleNotification(message: "Saving image", isLoading: true)
+                }
+
+                if postsViewModel.showImageSaved {
+                    ImageSavedNotification(postsViewModel: postsViewModel)
+                }
+
+                if postsViewModel.showErrorSavingImage {
+                    ErrorSavingImageNotification(postsViewModel: postsViewModel)
+                }
+
+                if postsViewModel.showProgressWhileSavingImages {
+                    CapsuleNotification(message: "Saving images", isLoading: true)
+                }
+
+                if postsViewModel.showImagesSaved {
+                    ImagesSavedNotification(postsViewModel: postsViewModel)
+                }
             }
 
-            if mainViewModel.showSavingAudio {
-                CapsuleNotification(message: "Saving audio from video", isLoading: true)
+            if let profilesViewModel {
+                if profilesViewModel.showTextCopied {
+                    TextCopiedNotification(profilesViewModel: profilesViewModel)
+                }
+
+                if profilesViewModel.showProgressWhileSavingImage {
+                    CapsuleNotification(message: "Saving image", isLoading: true)
+                }
+
+                if profilesViewModel.showImageSaved {
+                    ImageSavedNotification(profilesViewModel: profilesViewModel)
+                }
+
+                if profilesViewModel.showErrorSavingImage {
+                    ErrorSavingImageNotification(profilesViewModel: profilesViewModel)
+                }
             }
 
-            if mainViewModel.showAudioSavedToFiles {
-                AudioSavedNotification(mainViewModel: mainViewModel)
+            if let storiesViewModel {
+
+                if storiesViewModel.showProgressWhileSavingStories {
+                    CapsuleNotification(message: "Saving stories", isLoading: true)
+                }
+
+                if storiesViewModel.showStoriesSaved {
+                    StoriesSavedNotification(storiesViewModel: storiesViewModel)
+                }
+
+                if storiesViewModel.showVideoNOTSaved {
+                    ErrorSavingStoriesNotification(storiesViewModel: storiesViewModel)
+                }
             }
 
-            if mainViewModel.showErrorSavingAudio {
-                ErrorSavingAudioNotification(mainViewModel: mainViewModel)
-            }
-
-            if mainViewModel.showProgressWhileSavingVideo {
-                CapsuleNotification(message: "Saving video", isLoading: true)
-            }
-
-            if mainViewModel.showVideoSaved {
-                VideoSavedNotification(mainViewModel: mainViewModel)
-            }
-
-            if mainViewModel.showVideoNOTSaved {
-                ErrorSavingVideoNotification(mainViewModel: mainViewModel)
-            }
-
-            if mainViewModel.showTextCopied {
-                TextCopiedNotification(mainViewModel: mainViewModel)
-            }
-
-            if mainViewModel.showProgressWhileSavingImage {
-                CapsuleNotification(message: "Saving image", isLoading: true)
-            }
-
-            if mainViewModel.showImageSaved {
-                ImageSavedNotification(mainViewModel: mainViewModel)
-            }
-
-            if mainViewModel.showErrorSavingImage {
-                ErrorSavingImageNotification(mainViewModel: mainViewModel)
-            }
-
-            if mainViewModel.showProgressWhileSavingStories {
-                CapsuleNotification(message: "Saving stories", isLoading: true)
-            }
-
-            if mainViewModel.showStoriesSaved {
-
-            }
 
         }
         .padding(.top, 30)
@@ -76,5 +109,5 @@ struct PreviewNotifications: View {
 }
 
 #Preview {
-    PreviewNotifications(mainViewModel: MainViewModel(), reelsViewModel: ReelsViewModel())
+    PreviewNotifications(reelsViewModel: ReelsViewModel())
 }

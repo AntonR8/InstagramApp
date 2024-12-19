@@ -6,7 +6,6 @@ struct ReelsClipInfo: View {
 
     var body: some View {
         HStack(alignment: .top) {
-
             Circle()
                 .fill(Color.gray.opacity(0.1))
                 .frame(width: 36)
@@ -19,10 +18,6 @@ struct ReelsClipInfo: View {
                         .clipShape(Circle())
                 }
 
-
-
-
-            
             VStack(alignment: .leading) {
                 Text(reels.author)
                     .font(.footnote)
@@ -33,15 +28,17 @@ struct ReelsClipInfo: View {
                     .lineLimit(2)
                 HStack {
                     Image(systemName: "music.note")
-                        .foregroundStyle(.white)
+
                     Text(reels.audioTitle ?? "")
                         .font(.caption2)
                         .lineLimit(2)
                 }
+
                 .padding(6)
                 .background(Color.black.opacity(0.3))
                 .cornerRadius(6)
             }
+            .foregroundStyle(.white)
             .padding(.top, 2)
 
         }

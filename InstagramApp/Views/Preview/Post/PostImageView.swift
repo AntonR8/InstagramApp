@@ -1,9 +1,3 @@
-//
-//  PostImageView.swift
-//  InstagramApp
-//
-//  Created by Антон Разгуляев on 25.11.2024.
-//
 
 import SwiftUI
 import SDWebImageSwiftUI
@@ -25,7 +19,8 @@ struct PostImageView: View {
                 }
                 .indicator(.activity)
                 .scaledToFill()
-                .cornerRadius(25)
+                .frame(width: size, height: size)
+                .cornerRadius(16)
             }
             .padding(8)
     }

@@ -1,24 +1,18 @@
-//
-//  PostPreview.swift
-//  InstagramApp
-//
-//  Created by Антон Разгуляев on 22.11.2024.
-//
 
 import SwiftUI
 import ApphudSDK
 
 struct PostPreview: View {
-    @State var reelsViewModel = ReelsViewModel()
-    var mainViewModel: MainViewModel
-
-    // delete:
+    @Environment(NavigationViewModel.self) var navigationViewModel
+    @State var postsViewModel = PostsViewModel()
+    @State var currentImage: String = ""
     let post: PostModel
 
     var body: some View {
-            VStack {
+        @Bindable var navigationViewModel = navigationViewModel
+        VStack {
                 ScrollView {
-                    PostImages(post: post)
+                    PostImages(post: post, currentImage: $currentImage)
                     HStack {
                         Avatar(avatarURL: post.authorAvatar)
                         AuthorAndDescription(author: post.author, description: post.description)
@@ -26,22 +20,34 @@ struct PostPreview: View {
                     .padding(.horizontal)
                 }
                 Spacer()
-                PostMenuButtons(post: post, mainViewModel: mainViewModel)
+                PostMenuButtons(post: post, postsViewModel: postsViewModel)
                 HStack {
                     CapsuleButton(leftIcon: "arrow.down", title: "Only this one", backgroundColor: .clear, foregroundColor: .accent, strokeColor: .gray.opacity(0.5)) {
-
+                        postsViewModel.showProgressWhileSavingImage = true
+                        Task {
+                            await  postsViewModel.saveImageToGallery(imageURL: currentImage)
+                        }
                     }
                     CapsuleButton(title: "Save \(post.carousel.count) images") {
-
+                        postsViewModel.showProgressWhileSavingImage = true
+                        Task {
+                            for postData in post.carousel {
+                                if let imageDownloadUrl = postData.imageDownloadUrl {
+                                    await  postsViewModel.saveImageToGallery(imageURL: imageDownloadUrl)
+                                }
+                            }
+                        }
                     }
                 }
                 .padding()
         }
+
         .onAppear{
-            reelsViewModel.loadVideos()
+            postsViewModel.loadPosts()
+            postsViewModel.addPosts(to: "Recents", postsForAdd: post)
         }
         .overlay(alignment: .top) {
-            PreviewNotifications(mainViewModel: mainViewModel, reelsViewModel: reelsViewModel)
+            PreviewNotifications(postsViewModel: postsViewModel)
         }
         .navigationTitle("Post")
         .navigationBarTitleDisplayMode(.inline)
@@ -52,20 +58,20 @@ struct PostPreview: View {
                 }
             }
         }
-//        .sheet(isPresented: $videosViewModel.showSelectVideoFolders) {
-//            SelectVideoFolder(videosViewModel: videosViewModel)
-//                .presentationDetents([.medium])
-//        }
-//        .popover(isPresented: $mainViewModel.showRateMeView, content: {
-//            RateMeView(mainViewModel: mainViewModel)
-//        })
-//        .newVideoFolderAllert(videosViewModel: videosViewModel)
+        .sheet(isPresented: $postsViewModel.showSelectPostFolders) {
+            SelectPostsFolder(postsViewModel: postsViewModel)
+                .presentationDetents([.medium])
+        }
+        .popover(isPresented: $navigationViewModel.showRateMeView, content: {
+            RateMeView()
+        })
+        .newPostFolderAllert(postsViewModel: postsViewModel)
     }
 }
 
 #Preview {
     NavigationStack {
-        PostPreview(mainViewModel: MainViewModel(), post: mockPostResponse.data.post)
+        PostPreview(post: mockPostResponse.data.post)
             .environment(NavigationViewModel())
     }
 }

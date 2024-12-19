@@ -3,13 +3,13 @@ import SwiftUI
 
 struct VideoSavedNotification: View {
     @Environment(\.requestReview) var requestReview
-    var mainViewModel: MainViewModel
+    var reelsViewModel: ReelsViewModel
 
     var body: some View {
         CapsuleNotification(message: "Video saved")
             .onAppear{
                 DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                    mainViewModel.showVideoSaved = false
+                    reelsViewModel.showVideoSaved = false
                     requestReview()
                 }
             }
@@ -17,5 +17,5 @@ struct VideoSavedNotification: View {
 }
 
 #Preview {
-    VideoSavedNotification(mainViewModel: MainViewModel())
+    VideoSavedNotification(reelsViewModel: ReelsViewModel())
 }

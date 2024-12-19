@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct AudioSavedNotification: View {
-    var mainViewModel: MainViewModel
+    var reelsViewModel: ReelsViewModel
 
     var body: some View {
         CapsuleNotification(message: "Saved audio from video")
             .onAppear{
                 DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                    mainViewModel.showAudioSavedToFiles = false
+                    reelsViewModel.showAudioSavedToFiles = false
                 }
             }
     }
 }
 
 #Preview {
-    AudioSavedNotification(mainViewModel: MainViewModel())
+    AudioSavedNotification(reelsViewModel: ReelsViewModel())
 }

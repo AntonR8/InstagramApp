@@ -1,15 +1,10 @@
-//
-//  PostImages.swift
-//  InstagramApp
-//
-//  Created by Антон Разгуляев on 22.11.2024.
-//
 
 import SwiftUI
 
 struct PostImages: View {
     let post: PostModel
-    
+    @Binding var currentImage: String
+
     func showNavPoints() {
         UIPageControl.appearance().currentPageIndicatorTintColor = .black
         UIPageControl.appearance().pageIndicatorTintColor = .gray
@@ -20,12 +15,20 @@ struct PostImages: View {
 
     var body: some View {
             TabView {
-                ForEach(post.carousel, id: \.self) { imagePreview in
-                    if let imageURL = imagePreview.imageDownloadUrl {
-                        PostImageView(imagePreview: imageURL)
+                ForEach(post.carousel, id: \.self) { onePost in
+
+                    if let videoURL = onePost.videoDownloadUrl {
+                        if let imageURL = onePost.imageDownloadUrl {
+                            PostVideoPreview(imagePreview: imageURL, videoPreview: videoURL)
+                                .onAppear {
+                                    currentImage = imageURL
+                                }
                     }
-                    if let videoURL = imagePreview.videoDownloadUrl {
-                        PostImageView(imagePreview: videoURL)
+                    } else if let imageURL = onePost.imageDownloadUrl {
+                        PostImageView(imagePreview: imageURL)
+                            .onAppear {
+                                currentImage = imageURL
+                            }
                     }
                 }
         }
@@ -39,5 +42,7 @@ struct PostImages: View {
 }
 
 #Preview {
-    PostImages(post: mockPostResponse.data.post)
+    ScrollView {
+        PostImages(post: mockPostResponse.data.post, currentImage: .constant(""))
+    }
 }

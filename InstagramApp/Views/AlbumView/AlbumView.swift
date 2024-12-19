@@ -62,10 +62,10 @@ struct AlbumView: View {
             }
         }
         .onDisappear{ navigationViewModel.albumViewIsShowing = false }
-//        .sheet(isPresented: $albumsViewModel.showSelectFolders) {
-//            SelectMusicFolder(albumsViewModel: albumsViewModel)
-//                .presentationDetents([.height(450)])
-//        }
+        .sheet(isPresented: $albumsViewModel.showSelectFolders) {
+            SelectMusicFolder(albumsViewModel: albumsViewModel)
+                .presentationDetents([.height(450)])
+        }
     }
 
 }
@@ -73,7 +73,8 @@ struct AlbumView: View {
 #Preview {
     NavigationStack {
         AlbumView(
-            chart: CountryChart(
+            chart:
+                CountryChart(
                 id: 2,
                 title: "Трендовые: США",
                 pos: 1,
@@ -94,9 +95,6 @@ struct AlbumView: View {
                         trend: "up",
                         url: "https://sf16-ies-music-sg.tiktokcdn.com/obj/tos-alisg-ve-2774/3c2b16b99d77407f8c7cff1d1c477b2b"
                     )
-                    
-                    
-                    
                 ]
             )
         )

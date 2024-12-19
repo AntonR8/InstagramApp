@@ -12,7 +12,7 @@ struct ProfileData: Codable {
     let profile: ProfileModel
 }
 
-struct ProfileModel: Codable {
+struct ProfileModel: Codable, Hashable {
     let userId, name, username: String
     let avatar: String
     let description: String
@@ -26,6 +26,31 @@ struct BioLink: Codable, Hashable {
     let url: String
 }
 
+struct ProfileFolderModel: Codable, Hashable {
+    let profilesArray: [ProfileModel]
+    let name: String
+
+    func addProfile(profile: ProfileModel) -> ProfileFolderModel {
+        var instanseProfiles: [ProfileModel] = profilesArray
+        instanseProfiles.append(profile)
+        return ProfileFolderModel(profilesArray: instanseProfiles, name: name)
+    }
+
+    func deleteProfile(profile: ProfileModel) -> ProfileFolderModel {
+        var instanseProfile: [ProfileModel] = profilesArray
+        if let index = instanseProfile.firstIndex(where: {$0.requestedUrl == profile.requestedUrl}) {
+            instanseProfile.remove(at: index)
+        }
+        return ProfileFolderModel(profilesArray: instanseProfile, name: name)
+    }
+
+    func changeName(newName: String) -> ProfileFolderModel {
+        return ProfileFolderModel(profilesArray: profilesArray, name: newName)
+    }
+}
+
+
+// MARK: - MockData
 
 let mockProfileResponse = ProfileResponse(
     error: false,

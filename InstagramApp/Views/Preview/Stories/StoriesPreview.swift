@@ -1,55 +1,63 @@
-//
-//  StoriesPreview.swift
-//  InstagramApp
-//
-//  Created by Антон Разгуляев on 22.11.2024.
-//
 
 import SwiftUI
 import ApphudSDK
 
 struct StoriesPreview: View {
-    @State var reelsViewModel = ReelsViewModel()
-    @Bindable var mainViewModel: MainViewModel
-
-    // удалить:
-    let stories = mockStoriesResponse.data.stories
-    let profileStories = mockProfileStoriesResponse.data.stories.array
+    @Environment(NavigationViewModel.self) var navigationViewModel
+    @State var storiesViewModel = StoriesViewModel()
+    let stories: (StoriesModel, [ProfileStoriesModel])
+    @State var currentStories: ProfileStoriesModel?
 
     var body: some View {
+        @Bindable var navigationViewModel = navigationViewModel
         VStack {
-//            if let storiesData = mainViewModel.storiesData {
-            StoriesTabView(stories: stories, profileStories: profileStories)
-                StoriesMenuView(reelsViewModel: reelsViewModel, mainViewModel: mainViewModel, stories: stories)
-                    .padding(.bottom)
+            ScrollView(showsIndicators: false){
+                StoriesTabView(stories: stories.0, profileStories: stories.1, currentStories: $currentStories)
+                StoriesMenuView(storiesViewModel: storiesViewModel, stories: stories)
+                    .padding(.vertical)
+            }
             HStack {
                 CapsuleButton(leftIcon: "arrow.down", title: "Only this one", backgroundColor: .clear, foregroundColor: .accent, strokeColor: .gray.opacity(0.5)) {
-//                    if mainViewModel.freeSavingsRemain() {
-                  //                        mainViewModel.downloadAndSaveVideoToGallery()
-                  //                    } else {
-                  //                        navigationViewModel.showPaywall = true
-                  //                    }
+                    if RestrictionsManager.shared.freeSavingsRemain() {
+                        if let videoDownloadUrl = currentStories?.videoDownloadUrl {
+                            storiesViewModel.downloadAndSaveVideoToGallery(link: videoDownloadUrl)
+                        } else if let imageDownloadUrl = currentStories?.imageDownloadUrl {
+                            storiesViewModel.downloadAndSaveVideoToGallery(link: imageDownloadUrl)
+                        } else {
+                            if let imageDownloadUrl = stories.0.imageDownloadUrl {
+                                storiesViewModel.downloadAndSaveVideoToGallery(link: imageDownloadUrl)
+                            }
+                        }
+                    } else {
+                        navigationViewModel.showPaywall = true
+                    }
                 }
-                    CapsuleButton(title: "Save \((profileStories.count+1).description) images") {
-//                    if mainViewModel.freeSavingsRemain() {
-                  //                        mainViewModel.downloadAndSaveVideoToGallery()
-                  //                    } else {
-                  //                        navigationViewModel.showPaywall = true
-                  //                    }
+                CapsuleButton(title: "Save \((stories.1.count).description) media") {
+                    if RestrictionsManager.shared.freeSavingsRemain() {
+                        for profileStories in stories.1 {
+                            if  let videoDownloadUrl = profileStories.videoDownloadUrl,
+                                !videoDownloadUrl.isEmpty {
+                                storiesViewModel.downloadAndSaveVideoToGallery(link: videoDownloadUrl)
+                            } else {
+                                Task { await storiesViewModel.saveImageToGallery(imageURL: profileStories.imageDownloadUrl) }
+                            }
+                        }
+                    } else {
+                        navigationViewModel.showPaywall = true
+                    }
                 }
             }
-//            } else {
-//                ProgressView()
-//            }
+            .padding(.bottom)
         }
         .onAppear{
-            reelsViewModel.loadVideos()
+            storiesViewModel.loadStories()
+            storiesViewModel.addStories(to: "Recents", storiesForAdd: stories.0)
         }
         .overlay(alignment: .top) {
-            PreviewNotifications(mainViewModel: mainViewModel, reelsViewModel: reelsViewModel)
+            PreviewNotifications(storiesViewModel: storiesViewModel)
         }
         .padding(.horizontal)
-        .navigationTitle("Reels")
+        .navigationTitle("Stories")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if !Apphud.hasPremiumAccess() {
@@ -58,20 +66,20 @@ struct StoriesPreview: View {
                 }
             }
         }
-        .sheet(isPresented: $reelsViewModel.showSelectVideoFolders) {
-            SelectVideoFolder(reelsViewModel: reelsViewModel)
+        .sheet(isPresented: $storiesViewModel.showSelectStoriesFolders) {
+            SelectStoriesFolder(storiesViewModel: storiesViewModel)
                 .presentationDetents([.medium])
         }
-        .popover(isPresented: $mainViewModel.showRateMeView, content: {
-            RateMeView(mainViewModel: mainViewModel)
+        .popover(isPresented: $navigationViewModel.showRateMeView, content: {
+            RateMeView()
         })
-        //        .newVideoFolderAllert(videosViewModel: videosViewModel)
+        .newStoriesFolderAllert(storiesViewModel: storiesViewModel)
     }
 }
 
 #Preview {
     NavigationStack {
-        StoriesPreview(mainViewModel: MainViewModel())
+        StoriesPreview(stories: (mockStoriesResponse.data.story, mockProfileStoriesResponse.data.profileStories.items))
     }
         .environment(NavigationViewModel())
 }

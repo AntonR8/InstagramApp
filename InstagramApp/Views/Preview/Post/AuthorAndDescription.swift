@@ -1,22 +1,16 @@
-//
-//  AuthorAndDescription.swift
-//  InstagramApp
-//
-//  Created by Антон Разгуляев on 22.11.2024.
-//
 
 import SwiftUI
 
 struct AuthorAndDescription: View {
     @State var hideDescription = true
-    let author: String
-    let description: String
+    let author: String?
+    let description: String?
     var body: some View {
         VStack(alignment: .leading) {
-            Text(author)
+            Text(author ?? "")
                 .fontWeight(.semibold)
                 .padding(.vertical, 4)
-            Text(description)
+            Text(description ?? "")
                 .foregroundStyle(.black.opacity(0.8))
                 .lineLimit(hideDescription ? 2 : .max)
             HStack {

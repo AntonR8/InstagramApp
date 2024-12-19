@@ -33,7 +33,7 @@ class PaywallViewModel {
 
     init() {
         Task {
-            await Apphud.start(apiKey: "app_Lq3Eoit1CwyroaFcfpW2RyHXdekMfF")
+            await Apphud.start(apiKey: Constants.Paywall.apphudApiKey)
             await loadProducts(for: currentPlacement)
         }
 
@@ -72,36 +72,18 @@ class PaywallViewModel {
 
         Apphud.purchase(selectedProduct) {result in
             if let error = result.error {
-                DispatchQueue.main.async {
-//                    self.firstRun = false
-                }
                 print("Ошибка выполнения Apphud.purchase")
                 debugPrint(error.localizedDescription)
             }
             if let subscription = result.subscription, subscription.isActive() {
 //                self.showPaywall = false
-                DispatchQueue.main.async {
-//                    self.firstRun = false
-                }
             } else if let purchase = result.nonRenewingPurchase, purchase.isActive() {
 //                self.showPaywall = false
-                DispatchQueue.main.async {
-//                    self.firstRun = false
-                }
             } else {
                 if Apphud.hasActiveSubscription() {
 //                    self.showPaywall = false
-                    DispatchQueue.main.async {
-//                        self.firstRun = false
-                    }
                 }
             }
-        }
-    }
-
-    func func1() {
-        if Apphud.hasPremiumAccess() {
-            // проверка на любую активную покупку
         }
     }
 
@@ -111,7 +93,7 @@ class PaywallViewModel {
             if let error = error {
                 print("Ошибка восставноления подписки")
                 debugPrint(error.localizedDescription)
-                // подписка не активка либо другая ошибка - обработка ошибку
+                // подписка не активка либо другая ошибка
             }
             if subscriptions?.first?.isActive() ?? false {
 //                self.showPaywall = false
@@ -126,8 +108,8 @@ class PaywallViewModel {
 
     func returnSubscriptionViewParameters(subscription: ApphudProduct) -> (subscriptionName: String, pricePerYear: String?, bestOffer: Bool, pricePerPeriod: String, period: String)? {
         switch subscription.productId {
-        case "yearly": (subscriptionName: "Annual", pricePerYear: "Just $0.42 per week", bestOffer: true, pricePerPeriod: "$19.99", period: "per year")
-        case "weekly": (subscriptionName: "Weekly", pricePerYear: nil, bestOffer: false, pricePerPeriod: "$4.99", period: "per week")
+        case "year_49.99_not_trial": (subscriptionName: "Annual", pricePerYear: "Just $49.99 per year", bestOffer: true, pricePerPeriod: "$1.04", period: "per week")
+        case "week_6.99_not_trial": (subscriptionName: "Weekly", pricePerYear: nil, bestOffer: false, pricePerPeriod: "$6.99", period: "per week")
         default: nil
         }
     }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FifthView: View {
     @AppStorage("firstRun") var firstRun = true
+    @Environment(NavigationViewModel.self) var navigationViewModel
 
     var body: some View {
         ZStack {
@@ -46,9 +47,9 @@ struct FifthView: View {
             .navigationBarBackButtonHidden(true)
             .overlay(alignment: .topTrailing) {
                 SmallImageButton(leftIcon: "xmark", foregroundStyle: .white, backGroundStyle: .clear) {
-//                    firstRun = false
-//                    paywallViewModel.showPaywall = true
-//                    mainViewModel.launchScreenOpacity = 0
+                    firstRun = false
+                    navigationViewModel.showPaywall = true
+                    navigationViewModel.launchScreenOpacity = 0
                 }.padding()
             }
         }
@@ -71,4 +72,5 @@ struct FifthView: View {
 
 #Preview {
     FifthView()
+        .environment(NavigationViewModel())
 }

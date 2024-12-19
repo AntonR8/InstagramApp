@@ -1,13 +1,8 @@
-//
-//  ProfileMenuButtons.swift
-//  InstagramApp
-//
-//  Created by Антон Разгуляев on 22.11.2024.
-//
 
 import SwiftUI
 
 struct ProfileMenuButtons: View {
+    var profilesViewModel: ProfilesViewModel
     let profile: ProfileModel
     let link: String
 
@@ -20,15 +15,13 @@ struct ProfileMenuButtons: View {
             }
 
             Button {
-//                if mainViewModel.clipInfo != nil {
-//                    videosViewModel.clipForAdd = mainViewModel.clipInfo
-//                    videosViewModel.showSelectVideoFolders = true
-//                } else { print("clipInfo ПУСТОЙ") }
+                    profilesViewModel.profileForAdd = profile
+                    profilesViewModel.showSelectProfileFolders = true
             } label: { MenuElement(icon: "bookmark", title: "Add to collection...") }
 
             Button {
-//                UIPasteboard.general.string = info.musicTitle
-//                mainViewModel.showTrackNameCopied = true
+                UIPasteboard.general.string = profile.description
+                profilesViewModel.showTextCopied = true
             } label: { MenuElement(icon: "doc.on.doc", title: "Copy profile text") }
         }
         .foregroundStyle(.primary)
@@ -36,5 +29,5 @@ struct ProfileMenuButtons: View {
 }
 
 #Preview {
-    ProfileMenuButtons(profile: mockProfileResponse.data.profile, link: "")
+    ProfileMenuButtons(profilesViewModel: ProfilesViewModel(), profile: mockProfileResponse.data.profile, link: "")
 }

@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct StoriesSavedNotification: View {
-    var mainViewModel: MainViewModel
+    var storiesViewModel: StoriesViewModel
 
     var body: some View {
         CapsuleNotification(message: "Stories saved")
             .onAppear{
                 DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-                    mainViewModel.showStoriesSaved = false
+                    storiesViewModel.showStoriesSaved = false
                 }
             }
     }
 }
 
 #Preview {
-    StoriesSavedNotification(mainViewModel: MainViewModel())
+    StoriesSavedNotification(storiesViewModel: StoriesViewModel())
 }

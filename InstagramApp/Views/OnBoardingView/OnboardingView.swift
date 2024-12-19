@@ -28,6 +28,7 @@ struct OnboardingView: View {
                 VStack() {
                     Text(title)
                         .font(.title)
+                        .foregroundStyle(.black)
                         .bold()
                         .padding()
                     Text(description)

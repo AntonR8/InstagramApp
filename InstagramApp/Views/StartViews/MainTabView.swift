@@ -4,9 +4,6 @@ import ApphudSDK
 struct MainTabView: View {
     @Environment(NavigationViewModel.self) var navigationViewModel
 
-
-//    @State var savedViewPickerSelection = "Videos"
-//
     var body: some View {
         @Bindable var navigationViewModel = navigationViewModel
         NavigationStack() {
@@ -23,7 +20,7 @@ struct MainTabView: View {
                             Text("Trends")
                             Image(systemName: "music.note.list")
                         }.tag(2)
-                    CollectionsView()
+                    CollectionView()
                         .tabItem {
                             Text("Collections")
                             Image(systemName: "bookmark")

@@ -29,7 +29,7 @@ struct SubscriptionButton: View {
                     .foregroundStyle(selectedProductIndex == paywallViewModel.selectedProductIndex ? .accent : .secondary)
                     .padding(.trailing, 4)
                 VStack(alignment: .leading) {
-                    Text(parameters?.subscriptionName ?? subscription.productId)
+                    Text(parameters?.subscriptionName ?? (subscription.productId))
                     if let pricePerYear = parameters?.pricePerYear {
                         Text(pricePerYear)
                             .font(.caption)
@@ -69,7 +69,12 @@ struct SubscriptionButton: View {
 }
 
 #Preview {
-    SubscriptionsOptions(paywallViewModel: PaywallViewModel())
+    if let product = PaywallViewModel().products.first {
+        SubscriptionButton(paywallViewModel: PaywallViewModel(), selectedProductIndex: 0, subscription: product)
+    } else {
+        Text("No products available")
+    }
+
 }
 
 
